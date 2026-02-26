@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Birthday Surprise</title>
+
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #ff9ec4, #ff6f91);
+      font-family: "Segoe UI", sans-serif;
+      overflow: hidden;
+    }
+
+    /* ---------------- CENTER LYRICS STYLE SCROLLING TEXT (MOBILE RESPONSIVE) ---------------- */
+    .corner-scroll {
+      position: absolute;
+      top: 45vh;
+      /* responsive vertical position */
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      color: white;
+      font-size: clamp(20px, 5vw, 32px);
+      /* auto-resizes on mobile */
+      font-weight: 900;
+      text-align: center;
+      text-shadow: 0 0 15px #ff4da6, 0 0 30px #ff4da6;
+      z-index: 9999;
+      padding: 0 10px;
+    }
+
+    /* ---------------- CARD ---------------- */
+    .card {
+      width: 380px;
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      transition: transform 1s ease-in-out, opacity 1.5s ease;
+      position: relative;
+      z-index: 10;
+      opacity: 0;
+      animation: fadeIn 2s forwards;
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
+    }
+
+    .slide-up {
+      transform: translateY(-140%);
+    }
+
+    .btn {
+      display: inline-block;
+      margin-top: 15px;
+      padding: 12px 25px;
+      background: #ff6f91;
+      color: white;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    /* ---------------- PHOTOS ---------------- */
+    .photos {
+      position: absolute;
+      bottom: 150px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 25px;
+      opacity: 0;
+      width: 90%;
+      transition: opacity 1s ease, transform 1s ease;
+    }
+
+    .photos img {
+      width: 250px;
+      height: 250px;
+      border-radius: 20px;
+      object-fit: cover;
+      transform: scale(0);
+      transition: transform 0.6s ease;
+    }
+
+    .show-photos {
+      opacity: 1;
+      transform: translate(-50%, -20px);
+    }
+
+    .show-photos img {
+      transform: scale(1);
+    }
+
+    /* ---------------- BALLOONS ---------------- */
+    .balloon {
+      position: absolute;
+      width: 60px;
+      animation: float 10s infinite ease-in-out;
+      opacity: 0.8;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(100vh);
+      }
+
+      100% {
+        transform: translateY(-120vh);
+      }
+    }
+
+    /* ---------------- HEARTS ---------------- */
+    .heart {
+      position: absolute;
+      color: #2eff7eeb;
+      font-size: 25px;
+      animation: heartFloat 4s linear infinite;
+      opacity: 0;
+    }
+
+    @keyframes heartFloat {
+      0% {
+        transform: translateY(0) scale(0.5);
+        opacity: 1;
+      }
+
+      100% {
+        transform: translateY(-200px) scale(1.5);
+        opacity: 0;
+      }
+    }
+
+    /* ---------------- CONFETTI ---------------- */
+    .confetti {
+      position: absolute;
+      width: 10px;
+      height: 14px;
+      animation: confettiFall 3s linear infinite;
+      opacity: 0;
+    }
+
+    @keyframes confettiFall {
+      0% {
+        transform: translateY(-20px) rotate(0deg);
+        opacity: 1;
+      }
+
+      100% {
+        transform: translateY(120vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    /* Final Surprise Message */
+    #finalMessage {
+      opacity: 0;
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 26px;
+      color: white;
+      font-weight: 600;
+      text-align: center;
+      width: 90%;
+      text-shadow: 0 0 10px #ff4da6;
+      transition: opacity 1.5s ease;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Background music -->
+  <audio id="music" src="prema.mp3"></audio>
+
+  <!-- Your own voice -->
+  <audio id="voiceAudio" src="WhatsApp Audio 2026-02-27 at 1.17.22 AM - Copy.mp4"></audio>
+
+  <div class="card" id="card">
+    <h1 style="font-family: 'Georgia', serif; font-size: 38px; color:#ff0066; text-shadow:0 0 10px white;">
+      🎂 HAPPY BIRTHDAY AKSHITHA 🎂
+    </h1>
+    <p>Enjoy the day, Wishing you joy, love and surprises.</p>
+    <div class="btn" onclick="reveal()">Make a Wish 🎉</div>
+  </div>
+
+  <!-- CENTER LYRICS SCROLLING TEXT -->
+  <div class="corner-scroll">
+    <p id="scrollLine"></p>
+  </div>
+
+  <div class="photos" id="photos">
+    <img src="photo1.jpeg">
+    <img src="photo2.jpeg">
+    <img src="photo3.jpeg">
+    <img src="photo4.jpeg">
+    <img src="photo5.jpg">
+    <img src="photo6.jpeg">
+    <img src="photo7.jpeg">
+    <img src="photo8.jpeg">
+    <img src="photo9.jpeg">
+    <img src="photo10.jpeg">
+  </div>
+
+  <!-- Final Surprise Message -->
+  <div id="finalMessage">YOUR PRESENCE MAKES EVERY FACE SMILE 💛</div>
+
+  <script>
+    function reveal() {
+      document.getElementById("card").classList.add("slide-up");
+
+      document.getElementById("music").play();
+      document.getElementById("music").volume = 0.2;
+
+      setTimeout(() => {
+        document.getElementById("photos").classList.add("show-photos");
+      }, 600);
+
+      setTimeout(() => {
+        document.getElementById("finalMessage").style.opacity = "1";
+      }, 2000);
+
+      setTimeout(() => {
+        document.getElementById("voiceAudio").play();
+        document.getElementById("voiceAudio").volume = 1.0;
+      }, 2500);
+
+      launchBalloons();
+      launchHearts();
+      launchConfetti();
+    }
+
+    /* Scrolling Text (Lyrics Style) */
+    const lines = [
+      "Happy Birthday Akshitha 💛",
+      "Cousin ani pilustharu…",
+      "kani naaku nuvvu naa own sister la untav.",
+      "Daily chats lo neeku teliyakunda",
+      "naa life lo chala special place tiskunnav.",
+      "Nuvvu eppudu happy ga undali.",
+      "I'm always there for you 🤍",
+      "– Chandra"
+    ];
+
+    let index = 0;
+    const scrollEl = document.getElementById("scrollLine");
+
+    function updateScroll() {
+      scrollEl.textContent = lines[index];
+      index = (index + 1) % lines.length;
+    }
+
+    updateScroll();
+    setInterval(updateScroll, 2500); /* SLOW LYRICS SPEED */
+
+    /* Balloons */
+    function launchBalloons() {
+      for (let i = 0; i < 8; i++) {
+        let b = document.createElement("img");
+        b.src = "https://i.imgur.com/7yZ8FvP.png";
+        b.className = "balloon";
+        b.style.left = Math.random() * 100 + "vw";
+        b.style.animationDuration = 7 + Math.random() * 5 + "s";
+        document.body.appendChild(b);
+      }
+    }
+
+    /* Hearts */
+    function launchHearts() {
+      for (let i = 0; i < 20; i++) {
+        let h = document.createElement("div");
+        h.className = "heart";
+        h.innerHTML = "❤️";
+        h.style.left = Math.random() * 100 + "vw";
+        h.style.animationDuration = 2 + Math.random() * 3 + "s";
+        document.body.appendChild(h);
+      }
+    }
+
+    /* Confetti */
+    function launchConfetti() {
+      for (let i = 0; i < 40; i++) {
+        let c = document.createElement("div");
+        c.className = "confetti";
+        c.style.left = Math.random() * 100 + "vw";
+        c.style.background = ["#ff4081", "#ffeb3b", "#4caf50", "#03a9f4", "#ff9800"][Math.floor(Math.random() * 5)];
+        c.style.animationDuration = 2 + Math.random() * 3 + "s";
+        document.body.appendChild(c);
+      }
+    }
+  </script>
+
+</body>
+
+</html>
